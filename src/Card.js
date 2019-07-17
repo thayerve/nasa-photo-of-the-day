@@ -13,8 +13,11 @@ import axios from "axios";
 
 export default function Card() {
     const [spacePic, setSpacePic] = useState({});
-    console.log('props passed to Card fn: ', spacePic)
-
+    
+    // console.log('props passed to Card fn: ', spacePic)
+    const dates = ['2012-03-14', '2014-04-17', '2015-11-08', '2015-09-18', '2018-02-21'];
+    const randomDate = dates[Math.floor(Math.random() * dates.length)];
+    
     useEffect(() => {
         axios.get(`https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY`)
         .then(response => {
@@ -26,7 +29,7 @@ export default function Card() {
         });
       }, []);
     if (spacePic.media_type === 'video') {
-        axios.get(`https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&date=2012-03-14`)
+        axios.get(`https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&date=${randomDate}`)
         .then(response => {
             setSpacePic(response.data)
         })
@@ -39,6 +42,7 @@ export default function Card() {
         <div className = 'card'>
             <img src={spacePic.url} alt={spacePic.title}/>
             <h2>{spacePic.title}</h2>
+            <h4>Photo date: {spacePic.date}</h4>
             <p>{spacePic.explanation}</p>
         </div>
     );
