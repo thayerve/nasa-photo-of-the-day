@@ -14,10 +14,17 @@ const StyledCard = styled.div`
     `
 
 const StyledImg = styled.img`
-    max-height: 100vh;
+    max-height: 95vh;
     max-width: 95%;
     margin: 1rem auto;
     border-radius: 5px;
+    `
+const StyledIframe = styled.iframe`
+    height: 95vh;
+    width: 95%;
+    margin: 1rem auto;
+    border-radius: 5px;
+    align-self: center;
     `
 
 const TextSection = styled.section`
@@ -41,7 +48,7 @@ const CardPara = styled.p`
 // data:
   // date: "2019-07-17"
   // explanation: "(string)"
-  // media_type: "video"
+  // media_type: "video" (or "image")
   // service_version: "v1"
   // title: "Apollo 11: Descent to the Moon"
   // url: "https://www.youtube.com/embed/xc1SzgGhMKc?start=850"
@@ -49,31 +56,33 @@ const CardPara = styled.p`
 
 export default function Card() {
     const [spacePic, setSpacePic] = useState({});
-    
-    // console.log('props passed to Card fn: ', spacePic)
-    const dates = ['2012-03-14', '2014-04-17', '2015-11-08', '2015-09-18', '2018-02-21'];
-    const randomDate = dates[Math.floor(Math.random() * dates.length)];
-    
+       
     useEffect(() => {
         axios.get(`https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY`)
         .then(response => {
-          // console.log('NASA APOD data: ', response)
+          console.log('NASA APOD data: ', response)
           setSpacePic(response.data);
         })
         .catch(error => {
           console.log('Oops! ', error);
         });
       }, []);
-    if (spacePic.media_type === 'video') {
-        axios.get(`https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&date=${randomDate}`)
-        .then(response => {
-            setSpacePic(response.data);
-        })
-        .catch (error => {
-            console.log('Sorry, no space pic today. ', error);
-        })
-    }
+
     if (!spacePic) return <h3>Loading...</h3>;
+    if (spacePic.media_type === 'video') {
+        return (
+            <StyledCard>
+                <StyledIframe src={spacePic.url} allowfullscreen />
+                <TextSection>
+                    <CardTitle>{spacePic.title}</CardTitle>
+                    <h4>Photo date: {spacePic.date}</h4>
+                    <CardPara>{spacePic.explanation}</CardPara>
+                </TextSection>
+            </StyledCard>
+            
+            );
+            
+    } else {
     return (
         <StyledCard>
             <StyledImg src={spacePic.url} alt={spacePic.title}/>
@@ -83,6 +92,9 @@ export default function Card() {
                 <CardPara>{spacePic.explanation}</CardPara>
             </TextSection>
         </StyledCard>
-    );
+        
+        );
+    }
 }
+
 
