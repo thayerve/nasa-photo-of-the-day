@@ -1,18 +1,26 @@
 import React, { useEffect, useState } from "react";
+import styled from "styled-components";
 import "./App.css";
-import Card from "./Card"
+import Header from "./Header";
+import Card from "./Card";
+import Footer from "./Footer";
 
+
+const Wrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    `
 
 function App() {
 
   return (
-    <div className="App">
-      <h1>Space Photo of the Day!</h1>
+    <Wrapper>
+      <Header />
       <Card />
-      <footer>
-      <p>Courtesy of <a href='https://www.nasa.gov/'>NASA</a></p>
-      </footer>
-    </div>
+      <Footer />
+    </Wrapper>
   );
 }
 
@@ -20,14 +28,3 @@ export default App;
 
 
 
-
-// useEffect(() => {
-//   axios
-//     .get(`https://dog.ceo/api/breed/${breed}/images/random/15`)
-//     .then(response => {
-//       const doggos = response.data.message;
-//       // console.log("dogs api:", doggos);
-//       // KEY PART, SAVE TO STATE:
-//       setPets(doggos);
-//     });
-// }, [breed]);
